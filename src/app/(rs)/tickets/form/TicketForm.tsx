@@ -16,7 +16,7 @@ import CheckboxWithLabel from "@/components/inputs/CheckboxWithLabel";
 import SelectWithLabel from "@/components/inputs/SelectWithLabel";
 import { useToast } from "@/hooks/use-toast";
 import { useAction } from "next-safe-action/hooks";
-import { saveTicketAction } from "@/app/actions/saveTicketAction";
+import { saveTicketAction } from "@/app/actions/saveTicket";
 import { LoaderCircle } from "lucide-react";
 import DisplayServerActionResponse from "@/components/DisplayServerActionResponse";
 
@@ -56,15 +56,17 @@ export default function TicketForm({
     const {
         execute: executeSave,
         result: saveResult,
-        isExecuting: isSaving,
+        isPending: isSaving,
         reset: resetSaveAction,
     } = useAction(saveTicketAction, {
         onSuccess({ data }) {
-            toast({
-                variant: "default",
-                title: "Success",
-                description: data?.message,
-            });
+          if (data?.message) {
+              toast({
+                  variant: "default",
+                  title: "Success",
+                  description: data.message,
+              });
+          }
         },
         onError() {
             toast({
